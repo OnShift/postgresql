@@ -15,24 +15,25 @@
 # hostssl    DATABASE  USER  ADDRESS  METHOD  [OPTIONS]
 # hostnossl  DATABASE  USER  ADDRESS  METHOD  [OPTIONS]
 #
-# TYPE  DATABASE        USER            ADDRESS                 METHOD
+# TYPE            DATABASE                          USER                              ADDRESS                   METHOD
+host              all                               all                               127.0.0.1/32              md5
 
 # Default:
 {% for connection in postgresql_pg_hba_default %}
 {% if connection.comment is defined %}
 # {{connection.comment}}
 {% endif %}
-{{connection.type}}  {{connection.database}}  {{connection.user}}  {{connection.address}}  {{connection.method}}
+{{ (connection.type).ljust(16) }}  {{ (connection.database).ljust(32) }}  {{ (connection.user).ljust(32) }}  {{ (connection.address).ljust(24) }}  {{connection.method}}
 {% endfor %}
 
 # Password hosts
 {% for host in postgresql_pg_hba_passwd_hosts %}
-host  all  all  {{host}}  password
+host              all                               all                               {{host}}                  password
 {% endfor %}
 
 # Trusted hosts
 {% for host in postgresql_pg_hba_trust_hosts %}
-host  all  all  {{host}}  trust
+host              all                               all                               {{host}}                  trust
 {% endfor %}
 
 # User custom
@@ -40,5 +41,5 @@ host  all  all  {{host}}  trust
 {% if connection.comment is defined %}
 # {{connection.comment}}
 {% endif %}
-{{connection.type}}  {{connection.database}}  {{connection.user}}  {{connection.address}}  {{connection.method}}
+{{ (connection.type).ljust(16) }}  {{ (connection.database).ljust(32) }}  {{ (connection.user).ljust(32) }}  {{ (connection.address).ljust(24) }}  {{connection.method}}
 {% endfor %}
