@@ -1,5 +1,12 @@
 # file: postgresql/tasks/users_privileges.yml
 
+- name: PostgreSQL | Determine if the server is a standby
+  become: yes
+  become_user: "{{postgresql_admin_user}}"
+  stat:
+    path: '{{ postgresql_data_directory }}/recovery.conf'
+  register: postgresql_user_privileges_is_standby
+
 - name: PostgreSQL | Update the user privileges
   postgresql_user:
     name: "{{item.name}}"
@@ -13,4 +20,4 @@
   become: yes
   become_user: "{{postgresql_admin_user}}"
   with_items: "{{postgresql_user_privileges}}"
-  when: postgresql_users|length > 0
+  when: postgresql_users|length > 0 and postgresql_user_privileges_is_standby.stat.exists == false
