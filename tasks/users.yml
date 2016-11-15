@@ -1,5 +1,12 @@
 # file: postgresql/tasks/users.yml
 
+- name: PostgreSQL | Determine if the server is a standby
+  become: yes
+  become_user: "{{postgresql_admin_user}}"
+  stat:
+    path: '{{ postgresql_data_directory }}/recovery.conf'
+  register: postgresql_users_is_standby
+
 - name: PostgreSQL | Ensure PostgreSQL is running
   service:
     name: "{{ postgresql_service_name }}"
@@ -16,4 +23,4 @@
   become: yes
   become_user: "{{postgresql_admin_user}}"
   with_items: "{{postgresql_users}}"
-  when: postgresql_users|length > 0
+  when: postgresql_users|length > 0 and postgresql_users_is_standby.stat.exists == false
