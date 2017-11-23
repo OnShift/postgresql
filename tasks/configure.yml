@@ -158,8 +158,14 @@
     enabled: yes
   when: "{{ postgresql_service_enabled | bool }}"
 
+- name: PostgreSQL | Reload PostgreSQL
+  service:
+    name: "{{ postgresql_service_name }}"
+    state: reloaded
+  when: postgresql_configuration_pt1.changed
+
 - name: PostgreSQL | Restart PostgreSQL
   service:
     name: "{{ postgresql_service_name }}"
     state: restarted
-  when: postgresql_configuration_pt1.changed or postgresql_configuration_pt2.changed or postgresql_configuration_pt3.changed or postgresql_systemd_custom_conf.changed
+  when: postgresql_configuration_pt2.changed or postgresql_configuration_pt3.changed or postgresql_systemd_custom_conf.changed
