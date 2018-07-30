@@ -198,7 +198,7 @@
   service:
     name: "{{ postgresql_service_name }}"
     enabled: yes
-  when: "{{ postgresql_service_enabled | bool }}"
+  when: postgresql_service_enabled | bool == true
 
 - name: PostgreSQL | Reload all conf files
   service:
