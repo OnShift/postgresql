@@ -6,12 +6,3 @@
       name: "{{ postgresql_service_name }}"
       state: restarted
       enabled: yes
-
-  - name: restart postgresql with systemd
-    become: true
-    systemd:
-      name: "{{ postgresql_service_name }}"
-      state: restarted
-      enabled: yes
-    when: ansible_service_mgr == 'systemd'
-
